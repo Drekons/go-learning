@@ -19,8 +19,6 @@ func main() {
 		position = 1
 	} else if x < 0 && y > 0 {
 		position = 2
-	} else if x < 0 && y > 0 {
-		position = 2
 	} else if x < 0 && y < 0 {
 		position = 3
 	} else if x > 0 && y < 0 {
