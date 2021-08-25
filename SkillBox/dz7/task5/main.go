@@ -14,13 +14,13 @@ func main() {
 	max := 100
 	number := rand.Intn(101)
 
-	fmt.Println("Программа загадала число, попробуйте его угадать", number)
+	fmt.Println("Программа загадала число, попробуйте его угадать")
 
 	for {
 		var guess int
 		for guess < min || guess > max {
 			fmt.Print("Введите число от ", min, " до ", max, ": ")
-			fmt.Scan(&guess)
+			_, _ = fmt.Scan(&guess)
 		}
 
 		if guess == number {
