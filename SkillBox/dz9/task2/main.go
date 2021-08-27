@@ -24,17 +24,17 @@ func main() {
 		case result <= math.MaxUint16:
 			resType = "uint16"
 		case result <= math.MaxUint32:
-			resType = "uint16"
+			resType = "uint32"
 		default:
 			resType = "uint64"
 		}
 	} else {
 		switch {
-		case result >= math.MaxInt8:
+		case result*-1 <= math.MaxInt8:
 			resType = "int8"
-		case result <= math.MaxInt16:
+		case result*-1 <= math.MaxInt16:
 			resType = "int16"
-		case result <= math.MaxInt32:
+		case result*-1 <= math.MaxInt32:
 			resType = "int32"
 		default:
 			resType = "int64"
