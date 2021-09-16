@@ -6,10 +6,20 @@ const arrLength = 12
 
 func find(arr [arrLength]int, number int) (index int) {
 	index = -1
-	for i := 0; i < arrLength; i++ {
-		if arr[i] == number {
-			index = i
+	min := 0
+	max := arrLength - 1
+	for max >= min {
+		middle := (max + min) / 2
+		if arr[middle] == number {
+			for arr[middle] == number {
+				index = middle
+				middle--
+			}
 			return
+		} else if arr[middle] > number {
+			max = middle - 1
+		} else {
+			min = middle + 1
 		}
 	}
 
