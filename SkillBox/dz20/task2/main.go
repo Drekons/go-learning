@@ -2,10 +2,10 @@ package main
 
 import "fmt"
 
-const SentenceCount = 4
+const sentenceCount = 4
 const charsCount = 5
 
-func parseTest(sentences [SentenceCount]string, chars [charsCount]rune) (result [SentenceCount][charsCount]int) {
+func parseTest(sentences [sentenceCount]string, chars [charsCount]rune) (result [sentenceCount][charsCount]int) {
 	for i, sentence := range sentences {
 		lastWordChars := getLastWordLikeArray(sentence)
 		for j, char := range chars {
@@ -45,7 +45,7 @@ func findRuneInArray(char rune, wordChars []rune) (index int) {
 func main() {
 	fmt.Println("*** Задание 2. Поиск символов в нескольких строках ***")
 
-	sentences := [SentenceCount]string{"Hello world", "Hello Skillbox", "Привет Мир", "Привет Skillbox"}
+	sentences := [sentenceCount]string{"Hello world", "Hello Skillbox", "Привет Мир", "Привет Skillbox"}
 	chars := [charsCount]rune{'o', 'е', 'i', 'd', 'l'}
 
 	fmt.Printf("Массив предложений %v\n", sentences)
