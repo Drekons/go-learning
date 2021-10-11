@@ -68,11 +68,5 @@ func readFile(fileName string) []byte {
 }
 
 func getFilesDir() string {
-	pwd, err := os.Getwd()
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-
-	return pwd + "/files/"
+	return "./"
 }
