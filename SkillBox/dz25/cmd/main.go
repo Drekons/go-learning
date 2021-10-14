@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+	fmt.Println("**** Список студентов ****")
 	studentStorage := storage.NewStudentStorage()
 
 	defer func() {
@@ -18,9 +19,11 @@ func main() {
 		}
 	}()
 
+	fmt.Println("Водите данные о студентах через пробел в формате Имя Возраст Курс")
+	fmt.Println("Для завершения ввода списка студентов нажмите ctrl + D")
 	myScanner := bufio.NewScanner(os.Stdin)
 	for {
-		fmt.Printf("Введите данные студента: ")
+		fmt.Printf("Введите данные студента [Иван 21 3]: ")
 
 		myScanner.Scan()
 		studentString := myScanner.Text()
