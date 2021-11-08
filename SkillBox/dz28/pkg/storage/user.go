@@ -22,6 +22,10 @@ func (us Storage) Put(u *model.User) string {
 	return strconv.FormatInt(id, 10)
 }
 
+func (us Storage) Update(u *model.User) bool {
+	return us.repo.Update(u)
+}
+
 func (us Storage) Find(id string) (*model.User, error) {
 	user := us.repo.Find(id)
 

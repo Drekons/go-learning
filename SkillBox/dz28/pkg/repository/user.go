@@ -4,6 +4,7 @@ import (
 	"dz28/pkg/model"
 	"fmt"
 	"log"
+	"strconv"
 	"strings"
 )
 
@@ -46,7 +47,7 @@ func (u User) Find(id string) *model.User {
 	var user model.User
 	var friends string
 
-	if err := row.Scan(nil, &user.Name, &user.Age, &friends); err != nil {
+	if err := row.Scan(&user.Id, &user.Name, &user.Age, &friends); err != nil {
 		log.Println(err)
 		return nil
 	}
@@ -54,6 +55,23 @@ func (u User) Find(id string) *model.User {
 	user.Friends = strings.Split(friends, ",")
 
 	return &user
+}
+
+func (u User) Update(user *model.User) bool {
+	rows, err := GetSqlLite().Update(
+		table,
+		strconv.Itoa(user.Id),
+		map[string]string{
+			"name":    user.GetName(),
+			"age":     user.GetAge(),
+			"friends": strings.Join(user.GetFriends(), ","),
+		},
+	)
+	if err != nil {
+		log.Println(err)
+	}
+
+	return rows > 0
 }
 
 func (u User) Delete(id string) {

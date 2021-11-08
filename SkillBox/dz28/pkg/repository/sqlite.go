@@ -90,7 +90,7 @@ func (s *SqlLite) connect() {
 	}
 
 	var err error
-	s.db, err = sql.Open("sqlite3", "db.db")
+	s.db, err = sql.Open("sqlite3", "db")
 
 	if err != nil {
 		log.Fatalln(err)

@@ -26,6 +26,9 @@ func main() {
 	r.Use(middleware.AllowContentEncoding("Content-Type: application/json; charset=utf-8"))
 
 	r.Post("/*", handleProxy)
+	r.Get("/*", handleProxy)
+	r.Put("/*", handleProxy)
+	r.Delete("/*", handleProxy)
 
 	log.Println("Proxy running...")
 
@@ -37,9 +40,21 @@ func main() {
 func handleProxy(w http.ResponseWriter, r *http.Request) {
 	instance := getInstance()
 
-	resp := newRequest(r.Method, instance+r.RequestURI, bodyRead(r.Body))
+	body := bodyRead(r.Body)
+	fmt.Printf("request | %s %s: %s\n", r.Method, r.RequestURI, body)
+
+	resp := newRequest(r.Method, instance+r.RequestURI, body)
 	defer helper.BodyCloseResponse(resp)
-	fmt.Println(bodyRead(resp.Body))
+
+	responseBody := bodyRead(resp.Body)
+
+	fmt.Printf("response | %s: %s\n", instance, responseBody)
+
+	w.WriteHeader(resp.StatusCode)
+	if err := helper.WriteJson(responseBody, w); err != nil {
+		log.Println(err)
+		return
+	}
 }
 
 func getInstance() string {

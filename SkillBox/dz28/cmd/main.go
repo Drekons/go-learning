@@ -58,8 +58,7 @@ func updateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	u.SetAge(uu.NewAge)
-
-	log.Printf("Set new age %s for user id %s\n", uu.NewAge, userId)
+	userStorage.Update(u)
 
 	w.WriteHeader(http.StatusOK)
 	if err = helper.WriteJson("{\"message\": \"Возраст пользователя успешно обновлён\"}", w); err != nil {
@@ -155,6 +154,9 @@ func makeFriends(w http.ResponseWriter, r *http.Request) {
 
 	sUser.AddFriend(mf.Target)
 	tUser.AddFriend(mf.Source)
+
+	userStorage.Update(sUser)
+	userStorage.Update(tUser)
 
 	log.Printf("User id %s and user id %s are friends now\n", mf.Source, mf.Target)
 
