@@ -3,9 +3,10 @@ package repository
 import (
 	"database/sql"
 	"fmt"
-	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"strings"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type SqlLite struct {
@@ -83,7 +84,7 @@ func (s SqlLite) DeleteById(table, id string) (int64, error) {
 	return result.RowsAffected()
 }
 
-func (s SqlLite) connect() {
+func (s *SqlLite) connect() {
 	if s.db != nil {
 		return
 	}
@@ -123,7 +124,7 @@ func (s SqlLite) FindInSet(table, field, value string) (*sql.Rows, error) {
 	return rows, nil
 }
 
-func (s SqlLite) close() {
+func (s *SqlLite) close() {
 	if s.db == nil {
 		return
 	}

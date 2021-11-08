@@ -4,9 +4,11 @@ import (
 	"dz28/pkg/helper"
 	"dz28/pkg/model"
 	user "dz28/pkg/storage"
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -15,6 +17,10 @@ import (
 var userStorage user.Storage
 
 func main() {
+	var port int
+	flag.IntVar(&port, "p", 8080, "specify port to use. Defaults to 8080.")
+	flag.Parse()
+
 	userStorage = user.NewUserStorage()
 
 	r := chi.NewRouter()
@@ -26,9 +32,9 @@ func main() {
 	r.Get("/friends/{user_id}", getFriends)
 	r.Put("/{user_id}", updateUser)
 
-	log.Println("Server running...")
+	log.Printf("Server running on port %d ...", port)
 
-	if err := http.ListenAndServe(":8081", r); err != nil {
+	if err := http.ListenAndServe(":"+strconv.Itoa(port), r); err != nil {
 		log.Fatalln(err)
 	}
 }

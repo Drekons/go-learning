@@ -40,3 +40,9 @@ func BodyClose(r *http.Request) {
 		log.Fatalln(err)
 	}
 }
+
+func BodyCloseResponse(r *http.Response) {
+	if err := r.Body.Close(); err != nil {
+		log.Fatalln(err)
+	}
+}
