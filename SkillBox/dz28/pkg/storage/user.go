@@ -19,6 +19,7 @@ func NewUserStorage() Storage {
 
 func (us Storage) Put(u *model.User) string {
 	id := us.repo.Add(u)
+	u.Id = int(id)
 	return strconv.FormatInt(id, 10)
 }
 
