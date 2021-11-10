@@ -2,12 +2,17 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"dz28/pkg/helper"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -30,11 +35,39 @@ func main() {
 	r.Put("/*", handleProxy)
 	r.Delete("/*", handleProxy)
 
+	server := &http.Server{Addr: ":" + proxyPort, Handler: r}
+	serverCtx, serverStopCtx := context.WithCancel(context.Background())
+
+	sig := make(chan os.Signal, 1)
+	signal.Notify(sig, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+	go func() {
+		<-sig
+
+		shutdownCtx, cancel := context.WithTimeout(serverCtx, 30*time.Second)
+		defer cancel()
+
+		go func() {
+			<-shutdownCtx.Done()
+			if shutdownCtx.Err() == context.DeadlineExceeded {
+				log.Fatal("graceful shutdown timed out.. forcing exit.")
+			}
+		}()
+
+		err := server.Shutdown(shutdownCtx)
+		if err != nil {
+			log.Fatal(err)
+		}
+		serverStopCtx()
+	}()
+
 	log.Println("Proxy running...")
 
-	if err := http.ListenAndServe(":"+proxyPort, r); err != nil {
-		log.Fatalln(err)
+	err := server.ListenAndServe()
+	if err != nil && err != http.ErrServerClosed {
+		log.Fatal(err)
 	}
+
+	<-serverCtx.Done()
 }
 
 func handleProxy(w http.ResponseWriter, r *http.Request) {
